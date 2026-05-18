@@ -1,0 +1,5 @@
+mcp>=1.0.0
+python-dateutil>=2.9.0
+parsedatetime>=2.6
+holidays>=0.50
+tzdata>=2024.1

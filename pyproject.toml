@@ -1,0 +1,18 @@
+[project]
+name = "mcp-datetime"
+version = "0.2.0"
+description = "MCP server providing date, time, timezone, calendar, and market-session tools to local LLMs."
+requires-python = ">=3.10"
+dependencies = [
+    "mcp>=1.0.0",
+    "python-dateutil>=2.9.0",
+    "parsedatetime>=2.6",
+    "holidays>=0.50",
+    "tzdata>=2024.1",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "freezegun>=1.5"]
+
+[project.scripts]
+mcp-datetime = "server:mcp.run"
