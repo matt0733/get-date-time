@@ -156,4 +156,5 @@ math, and the rest of the tool surface.
 
 ## License
 
-Personal project — no license declared. Add one if redistributing.
+[MIT](LICENSE) © 2026 matt0733. Free to use, modify, and redistribute; keep
+the copyright notice and there is no warranty.
