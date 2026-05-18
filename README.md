@@ -15,12 +15,20 @@ Built for an assistant that needs to:
 
 ## Install
 
+**Requirements:** Python 3.10+ and `git`. No Homebrew or other package managers needed.
+
+The repo is public, so cloning works with no GitHub auth:
+
 ```bash
-cd /path/to/get-date-time
+git clone https://github.com/matt0733/get-date-time.git
+cd get-date-time
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 ```
+
+(If you already use SSH for GitHub on the target machine, you can clone with
+`git clone git@github.com:matt0733/get-date-time.git` instead.)
 
 ## Run
 
@@ -29,6 +37,28 @@ The server is started by an MCP host, not by hand. To smoke-test it:
 ```bash
 .venv/bin/python server.py     # waits on stdin; Ctrl-C to exit
 ```
+
+## Install on another Mac (or a fresh machine)
+
+The full sequence to install on a new machine and wire it into LM Studio:
+
+```bash
+# 1. Get the code
+cd ~/Projects                                            # or wherever you keep code
+git clone https://github.com/matt0733/get-date-time.git
+cd get-date-time
+
+# 2. Build the venv and install deps
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt
+
+# 3. (Optional) confirm it boots
+.venv/bin/python server.py    # Ctrl-C after a second of silence — no errors = good
+```
+
+Then add the LM Studio config below, **substituting the real absolute paths
+for that machine** (run `pwd` from inside the cloned folder to confirm).
+Restart LM Studio after editing `mcp.json`.
 
 ## Tools
 
@@ -73,8 +103,10 @@ Thanksgiving) are **not** modelled — the tool will report a normal close.
 
 ## LM Studio configuration
 
-LM Studio reads `~/.lmstudio/mcp.json`. Add (or merge) this entry, replacing
-the paths with your local install location:
+LM Studio reads `~/.lmstudio/mcp.json`. Add (or merge) this entry,
+**replacing the two paths with the absolute paths on the machine you are
+configuring** (the values below are an example from a Mac at
+`/Users/matt/Projects/get-date-time`):
 
 ```json
 {
@@ -86,6 +118,11 @@ the paths with your local install location:
   }
 }
 ```
+
+> **Both paths must be absolute** and must match the location of the cloned
+> repo on that specific machine — `~` and relative paths are not expanded.
+> If the file already contains other `mcpServers`, merge the `"datetime"`
+> entry into the existing object rather than replacing it.
 
 Then in LM Studio: load a model that supports tool use, open a chat, click the
 tools/MCP indicator, and confirm `datetime` is listed. (LM Studio re-reads
