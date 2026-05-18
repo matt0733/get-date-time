@@ -417,6 +417,11 @@ def format_datetime(datetime_str: str, format: str = "rfc3339", timezone: str | 
 def diff_datetimes(start: str, end: str, unit: str = "seconds") -> dict:
     """Compute the difference between two datetimes (end - start).
 
+    For whole-day counts between two calendar dates (e.g. "how many days from
+    today until Friday"), prefer `days_between` — this tool does timestamp
+    subtraction and will return fractional days when partial days are
+    involved.
+
     Args:
         start: ISO-8601 datetime.
         end: ISO-8601 datetime.
@@ -487,6 +492,33 @@ def add_duration(datetime_str: str, amount: float, unit: str, timezone: str | No
         "output": _datetime_payload(result),
         "amount": amount,
         "unit": u,
+    }
+
+
+@mcp.tool()
+def days_between(start_date: str, end_date: str, inclusive: bool = False) -> dict:
+    """Count whole calendar days between two dates (end - start), ignoring time of day.
+
+    Use this for questions like "how many days until Friday" or "how many
+    days between May 18 and May 29". Always returns an integer; never
+    contaminated by the current time of day.
+
+    Args:
+        start_date: ISO-8601 date (YYYY-MM-DD). Times are stripped if present.
+        end_date: ISO-8601 date (YYYY-MM-DD). Times are stripped if present.
+        inclusive: If True, count both endpoints (adds 1). Default False —
+            so days_between("2026-05-18", "2026-05-29") = 11, the gap.
+    """
+    s = _parse_iso(start_date).date()
+    e = _parse_iso(end_date).date()
+    delta = (e - s).days
+    count = delta + (1 if inclusive and delta >= 0 else (-1 if inclusive and delta < 0 else 0))
+    return {
+        "start_date": s.isoformat(),
+        "end_date": e.isoformat(),
+        "days": count,
+        "inclusive": inclusive,
+        "direction": "forward" if delta >= 0 else "backward",
     }
 
 

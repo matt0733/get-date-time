@@ -75,7 +75,8 @@ clock time, not 24 hours of elapsed seconds.
 | `from_epoch(value, timezone?, unit?)` | Unix epoch → ISO-8601. Auto-detects s / ms / µs / ns by magnitude. |
 | `parse_datetime(text, timezone?, reference?)` | Parse ISO, RFC-2822, or natural language ("next Friday 3pm", "in 2 hours"). |
 | `format_datetime(datetime, format, timezone?)` | Preset (`rfc3339`, `rfc2822`, `iso8601`, `epoch`, `epoch_ms`, `human`, `date`, `time`) or `strftime` pattern. |
-| `diff_datetimes(start, end, unit?)` | Difference in any unit + total seconds + human string. |
+| `diff_datetimes(start, end, unit?)` | Difference in any unit + total seconds + human string (may be fractional). |
+| `days_between(start_date, end_date, inclusive?)` | Whole calendar days between two dates, ignoring time of day. Use this for "how many days until X". |
 | `add_duration(datetime, amount, unit, timezone?)` | DST-aware addition / subtraction. Units: seconds → years. |
 | `list_timezones(query?, limit?)` | Search the IANA zone database (e.g. `"india"` → `Asia/Kolkata`). |
 | `market_status(market, at?)` | Is a market open? Knows weekends + national holidays. |

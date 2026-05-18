@@ -145,6 +145,35 @@ def test_add_duration_negative_hours():
     assert out["output"]["iso8601"].startswith("2026-05-18T09:00:00")
 
 
+def test_days_between_forward():
+    # Mon May 18 → Fri May 29, 2026 = 11 calendar days
+    out = server.days_between("2026-05-18", "2026-05-29")
+    assert out["days"] == 11
+    assert out["direction"] == "forward"
+
+
+def test_days_between_ignores_time_of_day():
+    # Same calendar dates regardless of embedded times → 11
+    out = server.days_between("2026-05-18T15:30:00", "2026-05-29T00:00:00")
+    assert out["days"] == 11
+
+
+def test_days_between_inclusive():
+    out = server.days_between("2026-05-18", "2026-05-29", inclusive=True)
+    assert out["days"] == 12
+
+
+def test_days_between_backward_is_negative():
+    out = server.days_between("2026-05-29", "2026-05-18")
+    assert out["days"] == -11
+    assert out["direction"] == "backward"
+
+
+def test_days_between_same_date_is_zero():
+    out = server.days_between("2026-05-18", "2026-05-18")
+    assert out["days"] == 0
+
+
 def test_add_duration_months():
     out = server.add_duration(
         "2026-01-31T12:00:00+00:00",
