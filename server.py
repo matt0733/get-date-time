@@ -8,6 +8,7 @@ known or can be inferred. All math is DST-correct.
 from __future__ import annotations
 
 import calendar as _calendar
+import logging
 import re
 from datetime import date, datetime, time, timedelta
 from typing import Any
@@ -18,6 +19,11 @@ import parsedatetime as _pdt
 from dateutil import parser as _dateparser
 from dateutil.relativedelta import relativedelta
 from mcp.server.fastmcp import FastMCP
+
+# Silence MCP SDK INFO logs ("Processing request of type ListToolsRequest").
+# stdio servers must log to stderr (stdout carries JSON-RPC), but LM Studio
+# tags any stderr output as [ERROR]. Genuine warnings/errors still surface.
+logging.getLogger("mcp").setLevel(logging.WARNING)
 
 mcp = FastMCP("datetime")
 
