@@ -17,12 +17,19 @@ Built for an assistant that needs to:
 
 **Requirements:** Python 3.10+ and `git`. No Homebrew or other package managers needed.
 
+> **macOS gotcha:** the stock `/usr/bin/python3` is **3.9.6**, which is too old.
+> Run `python3 --version` first. If it reports 3.9, install a newer Python from
+> [python.org](https://www.python.org/downloads/) (or via Homebrew/pyenv) and
+> use the versioned binary — `python3.11`, `python3.12`, `python3.14`, etc. — in
+> the `venv` command below instead of plain `python3`. Building the venv with
+> 3.9 will fail at `pip install` because `mcp` requires Python ≥ 3.10.
+
 The repo is public, so cloning works with no GitHub auth:
 
 ```bash
 git clone https://github.com/matt0733/get-date-time.git
 cd get-date-time
-python3 -m venv .venv
+python3 -m venv .venv          # or python3.11 / python3.12 / python3.14
 source .venv/bin/activate
 pip install -r requirements.txt
 ```
@@ -48,17 +55,27 @@ cd ~/Projects                                            # or wherever you keep 
 git clone https://github.com/matt0733/get-date-time.git
 cd get-date-time
 
-# 2. Build the venv and install deps
+# 2. Verify Python ≥ 3.10 (macOS's stock python3 is 3.9 — see "macOS gotcha" above)
+python3 --version
+
+# 3. Build the venv and install deps. Use python3.11/3.12/3.14 explicitly if
+#    `python3 --version` reported 3.9.
 python3 -m venv .venv
 .venv/bin/pip install -r requirements.txt
 
-# 3. (Optional) confirm it boots
+# 4. (Optional) confirm it boots
 .venv/bin/python server.py    # Ctrl-C after a second of silence — no errors = good
 ```
 
 Then add the LM Studio config below, **substituting the real absolute paths
 for that machine** (run `pwd` from inside the cloned folder to confirm).
 Restart LM Studio after editing `mcp.json`.
+
+> **Merging into an existing `mcp.json`:** if you already have other servers
+> configured (e.g. `llm-memory`), add the `"datetime"` block as a **sibling
+> entry inside the existing `mcpServers` object** — do not replace the whole
+> file. JSON is strict about commas: each entry except the last needs a
+> trailing comma after its closing `}`.
 
 ## Tools
 
